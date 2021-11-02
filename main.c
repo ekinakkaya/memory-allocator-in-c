@@ -43,6 +43,7 @@
 #include <pthread.h>
 
 #include <stdio.h>
+#include <string.h>
 
 
 
@@ -191,8 +192,31 @@ void free(void *block) {
 }
 
 
+void *calloc(size_t num, size_t nsize) {
+    size_t size;
+    void *block;
+
+    if (!num || ! nsize)
+        return NULL;
+
+    /* calculate size and sanity check */
+    size = num * nsize;
+    if (nsize != size / num)
+        return NULL;
+
+    /* call malloc and check NULLity */
+    block = malloc(size);
+    if (!block)
+        return NULL;
+
+    /* set all the memory to zero */
+    memset(block, 0, size);
+    return block;
+}
+
+
 // TODO
-// [ ] implement calloc
+// [+] implement calloc
 // [ ] implement realloc
 // [ ] write a few tests
 

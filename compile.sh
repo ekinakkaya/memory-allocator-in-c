@@ -7,7 +7,8 @@ echo "[test] exporting... LD_PRELOAD=$PWD/$libname"
 export LD_PRELOAD=$PWD/$libname
 echo $LD_PRELOAD
 
-#ls
+# execute ls command with our memory library
+ls -la
 
 export LD_PRELOAD=
 

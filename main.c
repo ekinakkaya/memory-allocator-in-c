@@ -192,6 +192,7 @@ void free(void *block) {
 }
 
 
+/* allocate for an array of num elemens of nsize bytes each */
 void *calloc(size_t num, size_t nsize) {
     size_t size;
     void *block;
@@ -215,9 +216,36 @@ void *calloc(size_t num, size_t nsize) {
 }
 
 
+/* reallocate memory for the block */
+void *realloc(void *block, size_t size) {
+    header_t *header;
+    void *ret;
+
+    /* if the block is NULL or the size is zero, call malloc */
+    if (!block || !size)
+        return malloc(size);
+
+    /* if the size from header is bigger than the requested size, do nothing */
+    header = (header_t *) block - 1;
+    if (header->s.size >= size)
+        return block;
+
+    /* if the requested size is bigger than the current size, memcpy the block to ret,
+     * free the block, return the new block
+     */
+    ret = malloc(size);
+    if (ret) {
+        memcpy(ret, block, header->s.size);
+        free(block);
+    }
+    return ret;
+}
+
+
+
 // TODO
 // [+] implement calloc
-// [ ] implement realloc
+// [+] implement realloc
 // [ ] write a few tests
 
 
